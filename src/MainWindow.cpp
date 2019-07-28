@@ -71,7 +71,7 @@ void MainWindow::loadFile()
         statusBarMessage = this->tr("File successfully loaded");
     }
 
-    this->Impl_->Ui_.StatusBar_->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
+    this->statusBar()->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
 }
 
 namespace
@@ -103,7 +103,7 @@ bool MainWindow::saveFile(const QString& filename)
         this->Impl_->CurrentFilePath_ = filename;
     }
 
-    this->Impl_->Ui_.StatusBar_->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
+    this->statusBar()->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
     return r;
 }
 
@@ -127,7 +127,7 @@ bool MainWindow::saveFileAs()
     if (true == filename.isEmpty())
     {
         auto statusBarMessage = this->tr("Save operation aborted");
-        this->Impl_->Ui_.StatusBar_->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
+        this->statusBar()->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
         return false;
     }
 
