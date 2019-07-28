@@ -4,7 +4,8 @@ pipelines:
     default:
         - step:
             script:
-            - mkdir build && cd build
-            - cmake ..
-            - make -j
+                - apt-get update && apt-get install -y cmake
+                - mkdir build && cd build
+                - cmake ..
+                - make -j
 
