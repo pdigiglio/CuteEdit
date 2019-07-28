@@ -40,8 +40,14 @@ MainWindow::MainWindow(QWidget *parent)
     SAFE_CONNECT(ui.actionSaveAs, SIGNAL(triggered(bool)), this, SLOT(saveFileAs()));
 
     SAFE_CONNECT(ui.textEdit, SIGNAL(copyAvailable(bool)), ui.actionCopy, SLOT(setEnabled(bool)));
+    SAFE_CONNECT(ui.textEdit, SIGNAL(copyAvailable(bool)), ui.actionCut,  SLOT(setEnabled(bool)));
+    SAFE_CONNECT(ui.textEdit, &QTextEdit::copyAvailable, [](bool available) { qDebug("copyAvailable(available=%d)", available); });
+
     SAFE_CONNECT(ui.textEdit, SIGNAL(undoAvailable(bool)), ui.actionUndo, SLOT(setEnabled(bool)));
+    SAFE_CONNECT(ui.textEdit, &QTextEdit::undoAvailable, [](bool available) { qDebug("undoAvailable(available=%d)", available); });
+
     SAFE_CONNECT(ui.textEdit, SIGNAL(redoAvailable(bool)), ui.actionRedo, SLOT(setEnabled(bool)));
+    SAFE_CONNECT(ui.textEdit, &QTextEdit::redoAvailable, [](bool available) { qDebug("redoAvailable(available=%d)", available); });
 
     SAFE_CONNECT(ui.actionCut,   SIGNAL(triggered(bool)), this, SLOT(cut()));
     SAFE_CONNECT(ui.actionPaste, SIGNAL(triggered(bool)), this, SLOT(paste()));
@@ -55,6 +61,16 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() = default;
 
+void MainWindow::loadFile(const QString &filename, const QString &filecontent)
+{
+    this->Impl_->Ui_.textEdit->setPlainText(filecontent);
+    this->Impl_->CurrentFilePath_ = filename;
+
+    this->Impl_->Ui_.textEdit->undoAvailable(false);
+    this->Impl_->Ui_.textEdit->redoAvailable(false);
+    this->Impl_->Ui_.textEdit->copyAvailable(false);
+}
+
 void MainWindow::loadFile()
 {
     qDebug("loadFile()");
@@ -66,8 +82,7 @@ void MainWindow::loadFile()
     if (true == file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
         auto fileContent = QString::fromUtf8(file.readAll());
-        this->Impl_->Ui_.textEdit->setPlainText(fileContent);
-        this->Impl_->CurrentFilePath_ = filename;
+        this->loadFile(filename, fileContent);
         statusBarMessage = this->tr("File successfully loaded");
     }
 
@@ -188,8 +203,7 @@ void MainWindow::loadNew()
         return;
     }
 
-    this->Impl_->Ui_.textEdit->setPlainText("");
-    this->Impl_->CurrentFilePath_.clear();
+    this->loadFile("", "");
     auto statusBarMessage = this->tr("New file loaded");
     this->statusBar()->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
 }

@@ -13,9 +13,9 @@ public:
 
 signals:
 public slots:
+    void loadNew();
 
 private slots:
-    void loadNew();
     void loadFile();
     bool saveFile();
     bool saveFileAs();
@@ -39,6 +39,11 @@ private:
     bool saveFile(const QString& filename);
 
     bool mayDiscardDocument();
+
+    /// @brief Load a file with a given content.
+    /// @param filename The file name.
+    /// @param filecontent The file content.
+    void loadFile(const QString& filename, const QString& filecontent);
 
     using base = QMainWindow;
 };
