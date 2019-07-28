@@ -190,6 +190,8 @@ void MainWindow::loadNew()
 
     this->Impl_->Ui_.textEdit->setPlainText("");
     this->Impl_->CurrentFilePath_.clear();
+    auto statusBarMessage = this->tr("New file loaded");
+    this->statusBar()->showMessage(statusBarMessage, this->Impl_->StatusBarMessageTimeoutMs_);
 }
 
 bool MainWindow::mayDiscardDocument()
