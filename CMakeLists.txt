@@ -1,9 +1,12 @@
-# Version 3.1.0 is the minimum required to use Qt5
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.10.0)
 
 project ("CuteEdit" LANGUAGES CXX)
 
-#set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS
@@ -19,20 +22,12 @@ set(INCLUDE_DIRECTORIES
 #set(CMAKE_AUTORCC ON)
 #set(CMAKE_AUTOUIC ON)
 
-#if (CMAKE_VERSION VERSION_LESS "3.7.0")
-#    set(CMAKE_INCLUDE_CURRENT_DIR ON)
-#endif()
-
 find_package(Qt5
     COMPONENTS
     Core
     Gui
     Widgets
     REQUIRED)
-
-#set(UIC_SOURCES "")
-#add_subdirectory(forms)
-#message("uic sources: ${UIC_SOURCES}")
 
 add_subdirectory(forms)
 add_subdirectory(include)
