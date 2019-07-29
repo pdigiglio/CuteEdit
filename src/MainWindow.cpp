@@ -35,12 +35,25 @@ MainWindow::MainWindow(QWidget *parent)
       Impl_(std::make_unique<impl>())
 {
     this->Impl_->Ui_.setupUi(this);
+
+    // -- Ui --
     this->setWindowTitle(this->tr("CuteEdit"));
 
     this->Impl_->StatLabel_ = new QLabel;
     this->statusBar()->addPermanentWidget(this->Impl_->StatLabel_);
 
+    auto* toolbarMenu = this->Impl_->Ui_.menu_Settings->addMenu(this->tr("&Toolbars"));
+    toolbarMenu->setToolTip(this->tr("Show/hide toolbar"));
+    auto* toggleToolbarViewAction = this->Impl_->Ui_.ToolBar_->toggleViewAction();
 
+    toolbarMenu->addAction(toggleToolbarViewAction);
+
+    // -- Connections --
+    this->setConnections();
+}
+
+void MainWindow::setConnections()
+{
     auto& ui = this->Impl_->Ui_;
     SAFE_CONNECT(ui.textEdit, SIGNAL(textChanged()), this, SLOT(updateStats()));
 

@@ -4,7 +4,7 @@
 
 #include <memory>
 
-class MainWindow : public QMainWindow
+class MainWindow final : public QMainWindow
 {
     Q_OBJECT
 public:
@@ -34,6 +34,9 @@ private slots:
 private:
     struct impl;
     std::unique_ptr<impl> Impl_;
+
+    /// @brief Set the connections up.
+    void setConnections();
 
     /// @brief Save a file.
     /// @param filename The target file name.
