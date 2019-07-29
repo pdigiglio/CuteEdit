@@ -4,12 +4,14 @@
 #include "ui_MainWindow.h"
 
 #include <QFileDialog>
+#include <QLabel>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QString>
 
 #include <cassert>
 #include <memory>
+#include <numeric>
 
 struct MainWindow::impl
 {
@@ -17,12 +19,14 @@ struct MainWindow::impl
         :
           Ui_(),
           CurrentFilePath_(),
-          StatusBarMessageTimeoutMs_(3000)
+          StatusBarMessageTimeoutMs_(3000),
+          StatLabel_(nullptr)
     {}
 
     Ui::MainWindow Ui_;
     QString CurrentFilePath_;
     int StatusBarMessageTimeoutMs_;
+    QLabel* StatLabel_;
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -33,7 +37,13 @@ MainWindow::MainWindow(QWidget *parent)
     this->Impl_->Ui_.setupUi(this);
     this->setWindowTitle(this->tr("CuteEdit"));
 
+    this->Impl_->StatLabel_ = new QLabel;
+    this->statusBar()->addPermanentWidget(this->Impl_->StatLabel_);
+
+
     auto& ui = this->Impl_->Ui_;
+    SAFE_CONNECT(ui.textEdit, SIGNAL(textChanged()), this, SLOT(updateStats()));
+
     SAFE_CONNECT(ui.actionNew,    SIGNAL(triggered(bool)), this, SLOT(loadNew()));
     SAFE_CONNECT(ui.actionOpen,   SIGNAL(triggered(bool)), this, SLOT(loadFile()));
     SAFE_CONNECT(ui.actionSave,   SIGNAL(triggered(bool)), this, SLOT(saveFile()));
@@ -69,6 +79,8 @@ void MainWindow::loadFile(const QString &filename, const QString &filecontent)
     this->Impl_->Ui_.textEdit->undoAvailable(false);
     this->Impl_->Ui_.textEdit->redoAvailable(false);
     this->Impl_->Ui_.textEdit->copyAvailable(false);
+
+    this->updateStats();
 }
 
 void MainWindow::loadFile()
@@ -237,4 +249,25 @@ bool MainWindow::mayDiscardDocument()
     }
 
     return false == modified;
+}
+
+void MainWindow::updateStats()
+{
+    auto content = this->Impl_->Ui_.textEdit->document()->toPlainText();
+    content = content.simplified();
+
+    // TODO: improve this!
+    auto words = content.split(" ");
+
+    auto wordCount = words.count();
+    if (1 == wordCount && true == words[0].isEmpty())
+    {
+        wordCount = 0;
+    }
+
+    auto charCount = std::accumulate(std::cbegin(words), std::cend(words), 0,
+                    [](unsigned lhs, const QString& rhs) { return lhs + static_cast<unsigned>(rhs.length()); });
+
+    auto statsString = this->tr("Chars: %1; Words: %2").arg(charCount).arg(wordCount);
+    this->Impl_->StatLabel_->setText(statsString);
 }

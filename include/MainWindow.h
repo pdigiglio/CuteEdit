@@ -29,6 +29,8 @@ private slots:
     void about();
     void aboutQt();
 
+    void updateStats();
+
 private:
     struct impl;
     std::unique_ptr<impl> Impl_;
