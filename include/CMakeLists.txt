@@ -4,6 +4,7 @@ set(INCLUDE_DIRECTORIES
     PARENT_SCOPE)
 
 qt5_wrap_cpp(MOC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/MainWindow.h)
+qt5_wrap_cpp(MOC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/TemplateHandler.h)
 
 add_library(moc SHARED ${MOC_SOURCES})
 target_link_libraries(moc Qt5::Widgets)

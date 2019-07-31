@@ -3,6 +3,8 @@
 #include "qt_utils.h"
 #include "ui_MainWindow.h"
 
+#include "TemplateHandler.h"
+
 #include <QFileDialog>
 #include <QLabel>
 #include <QMainWindow>
@@ -47,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent)
     auto* toggleToolbarViewAction = this->Impl_->Ui_.ToolBar_->toggleViewAction();
 
     toolbarMenu->addAction(toggleToolbarViewAction);
+
+    new TemplateHandler(this->Impl_->Ui_.ListView_, this->Impl_->Ui_.textEdit, this->Impl_->Ui_.TemplateDocker_);
 
     // -- Connections --
     this->setConnections();
