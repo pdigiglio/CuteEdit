@@ -1,6 +1,8 @@
 Cute Edit
 ===
 
+[![Build Status](https://travis-ci.org/pdigiglio/CuteEdit.svg?branch=master)](https://travis-ci.org/pdigiglio/CuteEdit)
+
 A cross-platform Qt-based C++ text editor.
 
 To get started, clone this repository to the `CuteEdit` folder and:
