@@ -7,11 +7,11 @@ language:
 compiler:
     - clang
 
-# Safelist
-branches:
-    only:
-        - master
-        - ci
+## Safelist
+#branches:
+#    only:
+#        - master
+#        - ci
 
 before_install:
     - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
