@@ -3,10 +3,9 @@ Cute Edit
 
 A cross-platform Qt-based C++ text editor.
 
-To get started:
+To get started, clone this repository to the `CuteEdit` folder and:
 ```sh
-$ git clone https://p-digiglio@bitbucket.org/p-digiglio/cuteedit.git CuteEdit
-$ mkdir CuteEdit/build && cd CuteEdit/build
+$ mkdir -p CuteEdit/build && cd CuteEdit/build
 $ cmake ..
 $ make -j
 ```
