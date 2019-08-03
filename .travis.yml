@@ -6,7 +6,6 @@ language:
 
 compiler:
     - clang
-    - gcc
 
 # Safelist
 branches:
