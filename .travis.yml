@@ -1,0 +1,23 @@
+dist:
+    - xenial
+
+language:
+    - cpp
+
+compiler:
+    - clang
+    - gcc
+
+# Safelist
+branches:
+    only:
+        - master
+        - ci
+
+before_script:
+    - mkdir build
+    - cd build
+    - cmake ..
+
+script:
+    - make -j
