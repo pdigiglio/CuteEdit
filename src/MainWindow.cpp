@@ -3,12 +3,16 @@
 #include "qt_utils.h"
 #include "ui_MainWindow.h"
 
+#include "SettingGroup.h"
+#include "Settings.h"
 #include "TemplateHandler.h"
 
 #include <QFileDialog>
 #include <QLabel>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QSettings>
+#include <QSize>
 #include <QString>
 
 #include <cassert>
@@ -54,6 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // -- Connections --
     this->setConnections();
+
+    // -- Read the settings --
+    this->readSettings();
 }
 
 void MainWindow::setConnections()
@@ -86,7 +93,10 @@ void MainWindow::setConnections()
     SAFE_CONNECT(ui.actionAboutQt, SIGNAL(triggered(bool)), this, SLOT(aboutQt()));
 }
 
-MainWindow::~MainWindow() = default;
+MainWindow::~MainWindow()
+{
+    this->writeSettings();
+}
 
 void MainWindow::loadFile(const QString &filename, const QString &filecontent)
 {
@@ -287,4 +297,24 @@ void MainWindow::updateStats()
 
     auto statsString = this->tr("Chars: %1; Words: %2").arg(charCount).arg(wordCount);
     this->Impl_->StatLabel_->setText(statsString);
+}
+
+void MainWindow::readSettings()
+{
+    qDebug("readSettings()");
+
+    auto size = setting::get("Size", setting::SettingGroup::MainWindow, this->sizeHint());
+    qDebug("size: width=%d, height=%d", size.width(), size.height());
+    this->resize(size);
+
+    auto properties = setting::get<QByteArray>("Properties", setting::SettingGroup::MainWindow);
+    this->restoreState(properties);
+}
+
+void MainWindow::writeSettings()
+{
+    qDebug("writeSettings()");
+
+    setting::set("Size", setting::SettingGroup::MainWindow, this->size());
+    setting::set("Properties", setting::SettingGroup::MainWindow, this->saveState());
 }

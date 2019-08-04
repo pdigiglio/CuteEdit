@@ -50,5 +50,8 @@ private:
     /// @param filecontent The file content.
     void loadFile(const QString& filename, const QString& filecontent);
 
+    void readSettings();
+    void writeSettings();
+
     using base = QMainWindow;
 };
